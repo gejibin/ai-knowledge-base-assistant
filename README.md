@@ -21,7 +21,7 @@ LLM + Embedding + ChromaDB + Gradio
 pip install poetry
 ```
 
-- A .env file with a OPENAI_API_KEY is required to run the workflow. See the .env.sample file as an example.
+- A .env file with a OPENAI_API_KEY or ZHIPUAI_API_KEY is required to run the demo.
 
 ```
 git clone git@github.com:gejibin/ai-knowledge-base-assistant.git
@@ -41,7 +41,7 @@ http://127.0.0.1:9990
 
 **Next Steps**
 ```
-1. 后续优先支持DeepSeek
+1. 后续优先支持 DeepSeek
 2. 继续把一些接口更新到最新
 3. 支持Milvus向量库
 ```
