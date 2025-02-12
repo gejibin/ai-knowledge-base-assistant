@@ -1,7 +1,7 @@
-# ai-knowledge-base-assistant
+## ai-knowledge-base-assistant
 AI RAG for personal AI knowledge base assistant (only used for study)
 0.1.0 version
-## 个人知识库助手项目
+### 个人知识库助手项目
 ```
 LLM + Embedding + ChromaDB + Gradio
 
@@ -38,15 +38,16 @@ python serve/run_gradio.py
 http://127.0.0.1:9990
 
 ```
-## NOTE
-```
-有些信息来自网上，有些地方有问题，仅供参考学习用，可自行下载学习和调试。
-only used for study！！！
-```
 
-## 其他
+**Next Steps**
 ```
 1. 后续优先支持DeepSeek
 2. 继续把一些接口更新到最新
 3. 支持Milvus向量库
+```
+
+**NOTE**
+```
+有些信息来自网上，有些地方有问题，仅供参考学习用，可自行下载学习和调试。
+only used for study！！！
 ```
