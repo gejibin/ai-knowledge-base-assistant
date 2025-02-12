@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "myrag"
+version = "0.1.0"
+description = ""
+authors = ["gejb"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+langchain-community = "^0.3.17"
+fastapi = "^0.115.8"
+python-dotenv = "^1.0.1"
+zhipuai = "^2.1.5.20250106"
+websocket = "^0.2.1"
+openai = "^1.61.1"
+ipython = "^8.32.0"
+langchain-unstructured = {extras = ["local"], version = "^0.1.6"}
+langchain-huggingface = "^0.1.2"
+python-magic-bin = "0.4.14"
+pymupdf = "^1.25.3"
+chromadb = "^0.6.3"
+langchain-chroma = "^0.2.1"
+langchain-openai = "^0.3.5"
+executing = "^2.2.0"
+gradio = "5.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
