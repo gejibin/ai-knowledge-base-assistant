@@ -24,8 +24,8 @@ pip install poetry
 - A .env file with a OPENAI_API_KEY is required to run the workflow. See the .env.sample file as an example.
 
 ```
-git clone https://github.com/andrewyng/translation-agent.git
-cd translation-agent
+git clone git@github.com:gejibin/ai-knowledge-base-assistant.git
+cd ai-knowledge-base-assistant
 poetry install
 poetry shell # activates virtual environment
 ```
