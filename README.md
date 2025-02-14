@@ -6,10 +6,11 @@ AI RAG for personal AI knowledge base assistant (only used for study)
 LLM + Embedding + ChromaDB + Gradio
 
 1. 目前支持OpenAI和ZHUIAI的LLM
-2. 支持pdf、md、docx、txt等格式的文件
-3. 支持OpenAI和智普的Embedding模型
-4. windows环境下测试通过
-5. 后续测试其他LLM、Embedding模型和向量库
+2. 支持本地大模型调用（通过ollama支持）
+3. 支持pdf、md、docx、txt等格式的文件
+4. 支持OpenAI和智普的Embedding模型
+5. windows环境下测试通过
+6. 后续测试其他LLM、Embedding模型和向量库
 ```
 **演示界面**
 ![问答演示界面](./figures/QA.png)
@@ -37,6 +38,23 @@ python serve/run_gradio.py
 
 http://127.0.0.1:9990
 
+切换大模型的时候，需要清理历史记录（"Clear console"按钮），否则历史记录会传递到新模型里面。
+
+```
+
+**Local Model config**
+
+```
+在.env文件中添加以下内容：
+
+LOCAL_MODEL_ENABLE = True
+LOCAL_MODEL_URL = "http://localhost:11434"
+LOCAL_MODELS="deepseek-r1:7b,llama3:latest,glm4:latest,qwen2.5:7b"
+LOCAL_MODEL_DEFAULT = "llama3:latest"
+
+如果不使用于本地模型，可以设置：
+LOCAL_MODEL_ENABLE = False
+并重新启动服务
 ```
 
 **Next Steps**

@@ -5,6 +5,7 @@ from  langchain_community.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_models import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
 import sys
 sys.path.append('/Users/lta/Desktop/llm-universe/project')
 from qa_chain.model_to_llm import model_to_llm
@@ -82,6 +83,27 @@ class Chat_QA_chain_self:
         llm = model_to_llm(self.model, temperature, self.appid, self.api_key, self.Spark_api_secret,self.Wenxin_secret_key)
 
         #self.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+        qa_template = """
+            You are an assistant for question-answering tasks.
+            Use the following pieces of retrieved context to answer
+            the question. If you don't know the answer, say that you
+            don't know. Use three sentences maximum and keep the
+            answer concise. DO not output the reasoning process.
+            请不要输出推理过程！
+            不要输出'<think>'的过程！
+            不要输出'<think>'！
+            Please answer in Chinese！请用中文回答！
+
+
+            Chat History:
+            {chat_history}
+
+            Other context:
+            {context}
+
+            Question: {question}
+        """
+        qa_prompt = ChatPromptTemplate.from_template(qa_template)
 
         docs = self.vectordb.similarity_search(question,k=3)
         print(f"检索到的内容数：{len(docs)}")
@@ -93,7 +115,8 @@ class Chat_QA_chain_self:
 
         qa = ConversationalRetrievalChain.from_llm(
             llm = llm,
-            retriever = retriever
+            retriever = retriever,
+            combine_docs_chain_kwargs={"prompt": qa_prompt}
         )
         
         #print(self.llm)
@@ -102,6 +125,8 @@ class Chat_QA_chain_self:
         print(f"result: {result}")
         answer =  result['answer']
         print(f"answer: {answer}")
+        #deepseek-r1:7b would output <think> and </think> ... remove it
+        answer = answer.split("</think>")[-1]
         answer = re.sub(r"\\n", '<br/>', answer)
         self.chat_history.append((question,answer)) #更新历史记录
 

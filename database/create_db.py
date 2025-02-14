@@ -55,13 +55,16 @@ def file_loader(file, loaders):
     return
 
 
-def create_db_info(files=DEFAULT_DB_PATH, embeddings="openai", persist_directory=DEFAULT_PERSIST_PATH):
+def create_db_info(files, embeddings="openai", persist_directory=DEFAULT_PERSIST_PATH):
+    if files == None:
+        print("file or dir not exist")
+        return "file or dir not exist"
     if embeddings == 'openai' or embeddings == 'm3e' or embeddings =='zhipuai':
         vectordb = create_db(files, persist_directory, embeddings)
     return ""
 
 
-def create_db(files=DEFAULT_DB_PATH, persist_directory=DEFAULT_PERSIST_PATH, embeddings="openai"):
+def create_db(files, persist_directory=DEFAULT_PERSIST_PATH, embeddings="openai"):
     """
     该函数用于加载 PDF 文件，切分文档，生成文档的嵌入向量，创建向量数据库。
 

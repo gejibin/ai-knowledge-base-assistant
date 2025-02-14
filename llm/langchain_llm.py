@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@File    :   call_llm.py
-@Time    :   2023/10/18 10:45:00
-@Author  :   Logan Zou 
-@Version :   1.0
-@Contact :   loganzou0421@163.com
-@License :   (C)Copyright 2017-2018, Liugroup-NLPR-CASIA
-@Desc    :   将各个大模型的原生接口封装在一个接口
+各个大模型的langchain接口封装
 '''
 import sys
 import os
@@ -17,36 +11,25 @@ from dotenv import load_dotenv, find_dotenv
 from langchain.utils import get_from_dict_or_env
 
 from langchain_openai import ChatOpenAI
+from llm.ollama_llm import ChatLocalAI
+from llm.local_llm import LocalModels
 
 
-import websocket  # 使用websocket_client
 
 def get_completion(prompt :str, model :str, temperature=0.1,api_key=None, secret_key=None, access_token=None, appid=None, api_secret=None, max_tokens=2048):
-    # 调用大模型获取回复，支持上述三种模型+gpt
-    # arguments:
-    # prompt: 输入提示
-    # model：模型名
-    # temperature: 温度系数
-    # api_key：如名
-    # secret_key, access_token：调用文心系列模型需要
-    # appid, api_secret: 调用星火系列模型需要
-    # max_tokens : 返回最长序列
-    # return: 模型返回，字符串
-    # 调用 GPT
     print("llm model is: ", model)
-    if model in ["gpt-3.5-turbo", "gpt-3.5-turbo-16k-0613", "gpt-3.5-turbo-0613", "gpt-4", "gpt-4-32k"]:
+    local_models = LocalModels()
+    if local_models.local_model_enable and model in local_models.llm_model_list:
+        local_llm = ChatLocalAI(model, local_models.local_model_url, temperature)
+        return local_llm.get_response(prompt)
+    elif model in ["gpt-3.5-turbo", "gpt-3.5-turbo-16k-0613", "gpt-3.5-turbo-0613", "gpt-4", "gpt-4-32k"]:
         return get_completion_gpt(prompt, model, temperature, api_key, max_tokens)
     elif model in ["glm-4-plus", "glm-4-long", "glm-4-Air", "glm-4-flash"]:
         return get_completion_glm(prompt, model, temperature, api_key, max_tokens)
     else:
         print(f"mode {model} : 不正确的模型")
         return "不正确的模型"
-    '''
-    elif model in ["ERNIE-Bot", "ERNIE-Bot-4", "ERNIE-Bot-turbo"]:
-        return get_completion_wenxin(prompt, model, temperature, api_key, secret_key)
-    elif model in ["Spark-1.5", "Spark-2.0"]:
-        return get_completion_spark(prompt, model, temperature, api_key, appid, api_secret, max_tokens)
-    '''
+ 
 
     
 def get_completion_gpt(prompt : str, model : str, temperature : float, api_key:str, max_tokens:int):

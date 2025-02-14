@@ -10,6 +10,7 @@ import io                # 用于处理流式数据（例如文件流）
 import gradio as gr
 from dotenv import load_dotenv, find_dotenv
 from llm.langchain_llm import get_completion
+from llm.local_llm import LocalModels
 from database.create_db import create_db_info
 from qa_chain.Chat_QA_chain_self import Chat_QA_chain_self
 from qa_chain.QA_chain_self import QA_chain_self
@@ -38,10 +39,14 @@ DEFAULT_PERSIST_PATH = "./vector_db/chroma"
 AIGC_AVATAR_PATH = "./figures/agi_my_favicon.svg"
 DATAWHALE_AVATAR_PATH = "./figures/datawhale_avatar.png"
 AIGC_LOGO_PATH = "./figures/agi_my_favicon.svg"
+LOCAL_MODEL = False
+
+
 
 
 def get_model_by_platform(platform):
     return LLM_MODEL_DICT.get(platform, "")
+
 class Model_center():
     """
     存储问答 Chain 的对象 
@@ -52,6 +57,14 @@ class Model_center():
     def __init__(self):
         self.chat_qa_chain_self = {}
         self.qa_chain_self = {}
+        self.llm_model_list = LLM_MODEL_LIST
+        self.llm_default = INIT_LLM
+        local_models = LocalModels()
+        if local_models.local_model_enable:
+            self.llm_model_list = local_models.llm_model_list
+            self.llm_default = local_models.local_model_default
+   
+
 
     def chat_qa_chain_self_answer(self, question: str, chat_history: list = [], model: str = "openai", embedding: str = "openai", temperature: float = 0.0, top_k: int = 4, history_len: int = 3, file_path: str = DEFAULT_DB_PATH, persist_path: str = DEFAULT_PERSIST_PATH):
         """
@@ -149,6 +162,8 @@ def respond(message, chat_history, llm, history_len=3, temperature=0.1, max_toke
         return e, chat_history
 
 
+
+
 model_center = Model_center()
 
 block = gr.Blocks()
@@ -194,9 +209,9 @@ with block as demo:
             model_select = gr.Accordion("模型选择")
             with model_select:
                 llm = gr.Dropdown(
-                    LLM_MODEL_LIST,
+                    model_center.llm_model_list,
                     label="large language model",
-                    value=INIT_LLM,
+                    value=model_center.llm_default,
                     interactive=True)
 
                 embeddings = gr.Dropdown(EMBEDDING_MODEL_LIST,
