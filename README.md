@@ -34,7 +34,7 @@ poetry shell # activates virtual environment
 **Running**
 
 ```
-python serve/run_gradio.py
+python python app\app_gradio.py
 
 http://127.0.0.1:9990
 
